@@ -13,7 +13,7 @@ export default function Error({
 }) {
   return (
     <div className="relative flex min-h-[70vh] flex-col items-center justify-center overflow-hidden px-4">
-      <div className="grid-blueprint absolute inset-0 opacity-30" aria-hidden="true" />
+      <div className="grid-blueprint absolute inset-0 opacity-60" aria-hidden="true" />
       <div className="relative max-w-md text-center">
         <p className="font-mono text-[6rem] font-bold leading-none text-border select-none md:text-[9rem]">
           500

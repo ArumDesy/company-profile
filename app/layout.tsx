@@ -1,11 +1,12 @@
 import type { Metadata } from "next"
-import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google"
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google"
 
-import { siteConfig } from "@/config/site"
-import { TooltipProvider } from "@/components/ui/tooltip"
-import { Toaster } from "@/components/ui/sonner"
-import { SiteNavbar } from "@/components/site/navbar"
 import { SiteFooter } from "@/components/site/footer"
+import { SiteNavbar } from "@/components/site/navbar"
+import { ScrollProgress } from "@/components/site/scroll-progress"
+import { Toaster } from "@/components/ui/sonner"
+import { TooltipProvider } from "@/components/ui/tooltip"
+import { siteConfig } from "@/config/site"
 import "./globals.css"
 
 const inter = Inter({
@@ -80,10 +81,12 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
+      data-scroll-behavior="smooth"
       lang="id"
       className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} antialiased`}
     >
       <body className="flex min-h-dvh flex-col">
+        <ScrollProgress />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

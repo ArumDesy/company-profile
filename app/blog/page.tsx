@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
+import { Reveal } from "@/components/motion/reveal"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { siteConfig } from "@/config/site"
@@ -49,36 +50,36 @@ export default function BlogPage() {
       <section className="mx-auto max-w-5xl px-4 py-16 md:px-6 md:py-24">
         {posts.length === 0 ? (
           <div className="py-16 text-center">
-            <p className="text-muted-foreground">
-              Belum ada catatan. Yang pertama lagi ditulis.
-            </p>
+            <p className="text-muted-foreground">Belum ada catatan. Yang pertama lagi ditulis.</p>
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">
-            {posts.map((post) => (
-              <Card key={post.id} className="flex flex-col">
-                <CardHeader className="flex-1">
-                  <div className="mb-2 font-mono text-xs text-muted-foreground">
-                    {formatDate(post.created_at)}
-                  </div>
-                  <CardTitle className="text-base font-semibold leading-snug">
-                    <Link
-                      href={`/blog/${post.slug}`}
-                      className="hover:text-measure-ink transition-colors"
-                    >
-                      {post.title}
-                    </Link>
-                  </CardTitle>
-                  <CardDescription className="text-sm leading-relaxed">
-                    {post.excerpt}
-                  </CardDescription>
-                </CardHeader>
-                <CardFooter>
-                  <Button asChild variant="ghost" size="sm" className="px-0 text-measure-ink">
-                    <Link href={`/blog/${post.slug}`}>Baca selengkapnya →</Link>
-                  </Button>
-                </CardFooter>
-              </Card>
+            {posts.map((post, index) => (
+              <Reveal key={post.id} delay={index * 70} className="h-full">
+                <Card className="lift-brutal flex h-full flex-col">
+                  <CardHeader className="flex-1">
+                    <div className="mb-2 font-mono text-xs text-muted-foreground">
+                      {formatDate(post.created_at)}
+                    </div>
+                    <CardTitle className="text-base font-semibold leading-snug">
+                      <Link
+                        href={`/blog/${post.slug}`}
+                        className="transition-colors hover:text-measure-ink"
+                      >
+                        {post.title}
+                      </Link>
+                    </CardTitle>
+                    <CardDescription className="text-sm leading-relaxed">
+                      {post.excerpt}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardFooter>
+                    <Button asChild variant="ghost" size="sm" className="px-0 text-measure-ink">
+                      <Link href={`/blog/${post.slug}`}>Baca selengkapnya →</Link>
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </Reveal>
             ))}
           </div>
         )}

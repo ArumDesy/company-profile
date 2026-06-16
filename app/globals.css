@@ -5,17 +5,17 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --paper: #f4f6f8;
-  --paper-raised: #fbfcfd;
-  --paper-sunken: #e9edf2;
+  --paper: #e2e8f0;
+  --paper-raised: #ffffff;
+  --paper-sunken: #d4dce6;
   --ink-900: #14202e;
   --ink-800: #1b2430;
   --ink-700: #2b3a48;
   --ink-500: #51616f;
   --ink-400: #6c7c8a;
-  --line-100: #e3e9ef;
-  --line-200: #d2dbe4;
-  --line-300: #bcc8d3;
+  --line-100: #d3dbe5;
+  --line-200: #bcc8d6;
+  --line-300: #a4b4c6;
   --measure-400: #ff8a63;
   --measure-500: #ff6a3d;
   --measure-600: #ea5125;
@@ -33,7 +33,7 @@
   --space-12: 3rem;
   --space-16: 4rem;
 
-  --radius: 0.5rem;
+  --radius: 0.125rem;
   --grid-cell: 1.75rem;
 }
 
@@ -76,10 +76,10 @@
   --measure: var(--measure-500);
   --measure-foreground: #ffffff;
   --measure-ink: var(--measure-700);
-  --grid: var(--line-200);
+  --grid: var(--line-300);
   --destructive: var(--danger-500);
-  --border: var(--line-200);
-  --input: var(--line-300);
+  --border: var(--ink-700);
+  --input: var(--ink-700);
   --ring: var(--measure-500);
   --chart-1: var(--ink-800);
   --chart-2: var(--measure-500);
@@ -114,10 +114,10 @@
   --measure: var(--measure-500);
   --measure-foreground: #0e151d;
   --measure-ink: var(--measure-700);
-  --grid: var(--line-200);
+  --grid: var(--line-300);
   --destructive: var(--danger-500);
-  --border: var(--line-200);
-  --input: var(--line-300);
+  --border: var(--ink-700);
+  --input: var(--ink-700);
   --ring: var(--measure-500);
   --chart-1: var(--ink-800);
   --chart-2: var(--measure-500);
@@ -284,6 +284,52 @@
   color: var(--foreground);
 }
 
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.lift-brutal {
+  transition: transform 0.14s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.14s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lift-brutal:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 0 var(--foreground);
+}
+
+@keyframes survey-scan {
+  0% {
+    top: -2%;
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.5;
+  }
+  88% {
+    opacity: 0.5;
+  }
+  100% {
+    top: 102%;
+    opacity: 0;
+  }
+}
+.scan-line {
+  position: absolute;
+  inset-inline: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--measure), transparent);
+  animation: survey-scan 7s linear infinite;
+  pointer-events: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -294,5 +340,12 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .scan-line {
+    display: none;
   }
 }
