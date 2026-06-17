@@ -106,4 +106,5 @@ git tag week-10
 git push origin week-10
 ```
 
-Workflow bakal narik env dari Vercel, build artefaknya, terus rilis ke produksi.
+Workflow bakal deploy ke Vercel dan build-nya jalan di infra Vercel, jadi semua
+env (termasuk yang Sensitive) kebaca pas build.
