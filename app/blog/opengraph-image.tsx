@@ -1,14 +1,13 @@
-import { siteConfig } from "@/config/site"
 import { renderOgImage } from "@/lib/og"
 
 export const runtime = "nodejs"
-export const alt = `${siteConfig.name} — Studio web app Next.js & Supabase`
+export const alt = "Catatan teknis studio Rakitan"
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
 
 export default function Image() {
   return renderOgImage({
-    eyebrow: "Studio web app",
-    title: siteConfig.tagline,
+    eyebrow: "Catatan",
+    title: "Catatan teknis dari dapur studio.",
   })
 }
