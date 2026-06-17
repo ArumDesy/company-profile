@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Logo } from "@/components/brand/logo"
 import { mainNav, siteConfig } from "@/config/site"
+import { createClient } from "@/lib/supabase/client"
 import { cn } from "@/lib/utils"
 
 function isActive(href: string, pathname: string) {
@@ -18,11 +19,23 @@ function isActive(href: string, pathname: string) {
 export function SiteNavbar() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const [authed, setAuthed] = useState(false)
   const listRef = useRef<HTMLDivElement>(null)
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([])
   const [indicator, setIndicator] = useState({ left: 0, width: 0, visible: false })
 
   const activeIndex = mainNav.findIndex((item) => isActive(item.href, pathname))
+
+  const authHref = authed ? "/dashboard" : "/login"
+  const authLabel = authed ? "Dashboard" : "Masuk"
+
+  useEffect(() => {
+    const supabase = createClient()
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAuthed(!!session?.user)
+    })
+    return () => data.subscription.unsubscribe()
+  }, [])
 
   const moveTo = useCallback((index: number) => {
     const el = itemRefs.current[index]
@@ -84,6 +97,15 @@ export function SiteNavbar() {
         </div>
 
         <div className="flex items-center gap-2">
+          <Button
+            asChild
+            variant="ghost"
+            size="sm"
+            className="hidden font-mono text-xs uppercase tracking-widest md:inline-flex"
+          >
+            <Link href={authHref}>{authLabel}</Link>
+          </Button>
+
           <Button asChild size="sm" className="hidden md:inline-flex">
             <Link href="/contact">Ajukan proyek</Link>
           </Button>
@@ -118,7 +140,15 @@ export function SiteNavbar() {
                   </Link>
                 ))}
               </div>
-              <div className="mt-auto px-4 pb-4">
+              <div className="mt-auto flex flex-col gap-2 px-4 pb-4">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="w-full font-mono text-xs uppercase tracking-widest"
+                  onClick={() => setOpen(false)}
+                >
+                  <Link href={authHref}>{authLabel}</Link>
+                </Button>
                 <Button asChild className="w-full" onClick={() => setOpen(false)}>
                   <Link href="/contact">Ajukan proyek</Link>
                 </Button>

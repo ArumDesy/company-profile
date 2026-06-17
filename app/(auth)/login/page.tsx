@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 import { LoginForm } from "@/components/auth/login-form"
 import { createClient } from "@/lib/supabase/server"
 import { isAdminEmail } from "@/lib/auth/admin"
+import { humanizeOAuthError } from "@/lib/auth/oauth-errors"
 
 export const metadata: Metadata = {
   title: "Masuk",
@@ -12,11 +13,12 @@ export const metadata: Metadata = {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string; error?: string }>
+  searchParams: Promise<{ next?: string; error?: string; error_code?: string }>
 }) {
-  const { next, error } = await searchParams
+  const { next, error, error_code } = await searchParams
   const redirectTo =
     next && next.startsWith("/") && !next.startsWith("//") ? next : "/dashboard"
+  const errorMessage = humanizeOAuthError({ error, errorCode: error_code })
 
   const supabase = await createClient()
   const {
@@ -36,7 +38,7 @@ export default async function LoginPage({
             <h1 className="mt-1 text-xl font-bold">Masuk ke dashboard</h1>
           </div>
           <div className="px-6 py-6">
-            <LoginForm next={redirectTo} error={error} />
+            <LoginForm next={redirectTo} errorMessage={errorMessage} />
           </div>
         </div>
       </div>

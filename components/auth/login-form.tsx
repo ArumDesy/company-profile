@@ -13,11 +13,6 @@ import { GoogleButton } from "@/components/auth/google-button"
 
 const initialState: AuthState = { status: "idle" }
 
-const oauthErrors: Record<string, string> = {
-  denied: "Akun Google ini tidak punya akses admin.",
-  oauth: "Login Google gagal. Coba lagi.",
-}
-
 function SubmitButton() {
   const { pending } = useFormStatus()
   return (
@@ -27,7 +22,13 @@ function SubmitButton() {
   )
 }
 
-export function LoginForm({ next, error }: { next: string; error?: string }) {
+export function LoginForm({
+  next,
+  errorMessage,
+}: {
+  next: string
+  errorMessage?: string | null
+}) {
   const [state, formAction] = useActionState(signIn, initialState)
 
   useEffect(() => {
@@ -37,13 +38,20 @@ export function LoginForm({ next, error }: { next: string; error?: string }) {
   }, [state])
 
   useEffect(() => {
-    if (error && oauthErrors[error]) {
-      toast.error(oauthErrors[error])
-    }
-  }, [error])
+    if (errorMessage) toast.error(errorMessage)
+  }, [errorMessage])
 
   return (
     <div className="space-y-5">
+      {errorMessage && (
+        <div
+          role="alert"
+          className="border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+        >
+          {errorMessage}
+        </div>
+      )}
+
       <GoogleButton next={next} />
 
       <div className="flex items-center gap-3">
