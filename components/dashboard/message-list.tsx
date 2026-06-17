@@ -6,6 +6,7 @@ import { toast } from "sonner"
 
 import { deleteMessage } from "@/lib/actions/messages"
 import type { Message } from "@/lib/messages"
+import { highlightText } from "@/lib/highlight"
 import { Button } from "@/components/ui/button"
 import {
   AlertDialog,
@@ -29,7 +30,13 @@ function formatDate(iso: string) {
   }).format(new Date(iso))
 }
 
-export function MessageList({ messages }: { messages: Message[] }) {
+export function MessageList({
+  messages,
+  query = "",
+}: {
+  messages: Message[]
+  query?: string
+}) {
   const [optimisticMessages, removeOptimistic] = useOptimistic(
     messages,
     (prev, id: string) => prev.filter((m) => m.id !== id)
@@ -52,10 +59,12 @@ export function MessageList({ messages }: { messages: Message[] }) {
     return (
       <div className="border border-dashed border-border bg-card px-6 py-16 text-center">
         <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-          Kosong
+          {query ? "Tak ada hasil" : "Kosong"}
         </p>
         <p className="mt-2 text-sm text-muted-foreground">
-          Belum ada pesan masuk. Formulir kontak yang terkirim akan muncul di sini.
+          {query
+            ? "Tak ada pesan yang cocok dengan pencarianmu."
+            : "Belum ada pesan masuk. Formulir kontak yang terkirim akan muncul di sini."}
         </p>
       </div>
     )
@@ -68,17 +77,21 @@ export function MessageList({ messages }: { messages: Message[] }) {
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span className="font-semibold">{message.name}</span>
+                <span className="font-semibold">
+                  {highlightText(message.name, query)}
+                </span>
                 <Button
                   asChild
                   variant="link"
                   className="h-auto p-0 font-mono text-xs font-normal text-muted-foreground hover:text-foreground"
                 >
-                  <a href={`mailto:${message.email}`}>{message.email}</a>
+                  <a href={`mailto:${message.email}`}>
+                    {highlightText(message.email, query)}
+                  </a>
                 </Button>
               </div>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                {message.content}
+                {highlightText(message.content, query)}
               </p>
               <p className="mt-3 font-mono text-xs text-muted-foreground">
                 {formatDate(message.created_at)}

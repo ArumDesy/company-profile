@@ -7,6 +7,7 @@ import { toast } from "sonner"
 
 import { deletePost, togglePublish } from "@/lib/actions/posts"
 import type { Post } from "@/lib/posts"
+import { highlightText } from "@/lib/highlight"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -33,7 +34,13 @@ function formatDate(iso: string) {
   }).format(new Date(iso))
 }
 
-export function PostList({ posts }: { posts: Post[] }) {
+export function PostList({
+  posts,
+  query = "",
+}: {
+  posts: Post[]
+  query?: string
+}) {
   const [optimisticPosts, dispatch] = useOptimistic(
     posts,
     (prev, action: OptimisticAction) => {
@@ -76,16 +83,20 @@ export function PostList({ posts }: { posts: Post[] }) {
     return (
       <div className="border border-dashed border-border bg-card px-6 py-16 text-center">
         <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
-          Kosong
+          {query ? "Tak ada hasil" : "Kosong"}
         </p>
         <p className="mt-2 text-sm text-muted-foreground">
-          Belum ada artikel. Mulai tulis yang pertama.
+          {query
+            ? "Tak ada artikel yang cocok dengan pencarianmu."
+            : "Belum ada artikel. Mulai tulis yang pertama."}
         </p>
-        <div className="mt-5">
-          <Button asChild>
-            <Link href="/dashboard/posts/new">Tulis artikel pertama</Link>
-          </Button>
-        </div>
+        {!query && (
+          <div className="mt-5">
+            <Button asChild>
+              <Link href="/dashboard/posts/new">Tulis artikel pertama</Link>
+            </Button>
+          </div>
+        )}
       </div>
     )
   }
@@ -104,10 +115,12 @@ export function PostList({ posts }: { posts: Post[] }) {
                   {formatDate(post.created_at)}
                 </span>
               </div>
-              <h3 className="mt-1.5 font-semibold leading-snug">{post.title}</h3>
+              <h3 className="mt-1.5 font-semibold leading-snug">
+                {highlightText(post.title, query)}
+              </h3>
               {post.excerpt && (
                 <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-                  {post.excerpt}
+                  {highlightText(post.excerpt, query)}
                 </p>
               )}
             </div>

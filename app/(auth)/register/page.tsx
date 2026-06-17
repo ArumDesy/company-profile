@@ -1,12 +1,21 @@
 import type { Metadata } from "next"
+import { redirect } from "next/navigation"
 
 import { RegisterForm } from "@/components/auth/register-form"
+import { createClient } from "@/lib/supabase/server"
+import { isAdminEmail } from "@/lib/auth/admin"
 
 export const metadata: Metadata = {
   title: "Daftar",
 }
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (isAdminEmail(user?.email)) redirect("/dashboard")
+
   return (
     <div className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-4 py-16">
       <div className="grid-blueprint absolute inset-0 opacity-50" aria-hidden="true" />

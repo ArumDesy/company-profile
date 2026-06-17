@@ -10,7 +10,6 @@ export function Mermaid({ chart }: { chart: string }) {
 
   useEffect(() => {
     let active = true
-    setStatus("loading")
 
     import("mermaid")
       .then(({ default: mermaid }) => {
@@ -28,17 +27,15 @@ export function Mermaid({ chart }: { chart: string }) {
         setStatus("ready")
       })
       .catch(() => {
-        if (active) setStatus("error")
+        if (!active) return
+        if (ref.current) ref.current.innerHTML = ""
+        setStatus("error")
       })
 
     return () => {
       active = false
     }
   }, [chart, id])
-
-  if (status === "error") {
-    return <pre className="mermaid-fallback">{chart}</pre>
-  }
 
   return (
     <div className="mermaid-diagram" role="img" aria-label="Diagram alur">
@@ -47,6 +44,9 @@ export function Mermaid({ chart }: { chart: string }) {
         <span className="font-mono text-xs text-muted-foreground">
           Memuat diagram…
         </span>
+      )}
+      {status === "error" && (
+        <pre className="mermaid-fallback">{chart}</pre>
       )}
     </div>
   )

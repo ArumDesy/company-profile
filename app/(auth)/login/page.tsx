@@ -1,6 +1,9 @@
 import type { Metadata } from "next"
+import { redirect } from "next/navigation"
 
 import { LoginForm } from "@/components/auth/login-form"
+import { createClient } from "@/lib/supabase/server"
+import { isAdminEmail } from "@/lib/auth/admin"
 
 export const metadata: Metadata = {
   title: "Masuk",
@@ -12,7 +15,14 @@ export default async function LoginPage({
   searchParams: Promise<{ next?: string; error?: string }>
 }) {
   const { next, error } = await searchParams
-  const redirectTo = next ?? "/dashboard"
+  const redirectTo =
+    next && next.startsWith("/") && !next.startsWith("//") ? next : "/dashboard"
+
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (isAdminEmail(user?.email)) redirect(redirectTo)
 
   return (
     <div className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-4 py-16">

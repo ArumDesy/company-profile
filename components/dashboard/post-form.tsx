@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
-import { ForwardRefEditor } from "@/components/editor/forward-ref-editor"
+import { PostEditor } from "@/components/editor/post-editor"
 import { EditorGuide } from "@/components/editor/editor-guide"
 
 const initialState: PostFormState = { status: "idle" }
@@ -90,19 +90,12 @@ export function PostForm({ mode, post }: PostFormProps) {
       <div className="space-y-2">
         <FieldLabel htmlFor="content-editor">Isi artikel</FieldLabel>
         <EditorGuide />
-        <div
-          className={
-            state.fieldErrors?.content
-              ? "border border-destructive"
-              : "border border-border"
-          }
-        >
-          <ForwardRefEditor
-            markdown={initialMarkdown}
-            onChange={setContent}
-            placeholder="Tulis isi artikel di sini…"
-          />
-        </div>
+        <PostEditor
+          initialMarkdown={initialMarkdown}
+          value={content}
+          onChange={setContent}
+          invalid={!!state.fieldErrors?.content}
+        />
         {state.fieldErrors?.content && (
           <FieldError id="content-error">{state.fieldErrors.content}</FieldError>
         )}

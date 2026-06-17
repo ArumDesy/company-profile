@@ -1,10 +1,13 @@
 import type { Metadata } from "next"
 import { Suspense } from "react"
 
-import { getMessages } from "@/lib/messages"
+import { getMessagesPage } from "@/lib/messages"
 import { SearchBar } from "@/components/dashboard/search-bar"
 import { MessageList } from "@/components/dashboard/message-list"
+import { Pager } from "@/components/ui/pager"
 import { Skeleton } from "@/components/ui/skeleton"
+
+const PER_PAGE = 8
 
 export const metadata: Metadata = {
   title: "Pesan",
@@ -30,19 +33,18 @@ function MessageListSkeleton() {
   )
 }
 
-async function MessageResults({ q }: { q?: string }) {
-  const messages = await getMessages(q)
+async function MessageResults({ q, page }: { q: string; page: number }) {
+  const { messages, total } = await getMessagesPage(q, page, PER_PAGE)
 
   return (
     <>
       {q && (
         <p className="mb-4 font-mono text-xs text-muted-foreground">
-          Hasil untuk:{" "}
-          <span className="text-foreground">&ldquo;{q}&rdquo;</span>
-          {" "}— {messages.length} pesan ditemukan
+          Hasil untuk: <span className="text-foreground">&ldquo;{q}&rdquo;</span> — {total} pesan
         </p>
       )}
-      <MessageList messages={messages} />
+      <MessageList messages={messages} query={q} />
+      <Pager page={page} total={total} perPage={PER_PAGE} />
     </>
   )
 }
@@ -50,9 +52,10 @@ async function MessageResults({ q }: { q?: string }) {
 export default async function MessagesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>
+  searchParams: Promise<{ q?: string; page?: string }>
 }) {
-  const { q } = await searchParams
+  const { q = "", page: pageParam } = await searchParams
+  const page = Math.max(1, Number(pageParam) || 1)
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 md:px-8">
@@ -69,8 +72,8 @@ export default async function MessagesPage({
         </Suspense>
       </div>
 
-      <Suspense key={q ?? ""} fallback={<MessageListSkeleton />}>
-        <MessageResults q={q} />
+      <Suspense key={`${q}-${page}`} fallback={<MessageListSkeleton />}>
+        <MessageResults q={q} page={page} />
       </Suspense>
     </div>
   )

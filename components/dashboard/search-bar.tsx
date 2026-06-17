@@ -7,7 +7,15 @@ import { SearchIcon, XIcon } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
-export function SearchBar() {
+type SearchBarProps = {
+  placeholder?: string
+  ariaLabel?: string
+}
+
+export function SearchBar({
+  placeholder = "Cari nama, email, atau isi pesan…",
+  ariaLabel = "Cari pesan",
+}: SearchBarProps) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
@@ -25,6 +33,7 @@ export function SearchBar() {
       } else {
         params.delete("q")
       }
+      params.delete("page")
       router.replace(`${pathname}?${params.toString()}`)
     }, 300)
 
@@ -37,6 +46,7 @@ export function SearchBar() {
     setValue("")
     const params = new URLSearchParams(searchParams.toString())
     params.delete("q")
+    params.delete("page")
     router.replace(`${pathname}?${params.toString()}`)
   }
 
@@ -46,9 +56,9 @@ export function SearchBar() {
       <Input
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Cari nama, email, atau isi pesan…"
+        placeholder={placeholder}
         className="pl-9 pr-9"
-        aria-label="Cari pesan"
+        aria-label={ariaLabel}
       />
       {value && (
         <Button
