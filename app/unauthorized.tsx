@@ -12,11 +12,14 @@ export default function Unauthorized() {
         </p>
         <h1 className="mt-2 text-xl font-bold md:text-2xl">Masuk dulu, ya</h1>
         <p className="mx-auto mt-3 max-w-[40ch] text-muted-foreground">
-          Halaman ini cuma bisa dibuka setelah kamu masuk. Kembali ke beranda dulu, panel masuk
-          menyusul.
+          Halaman ini cuma bisa dibuka setelah kamu masuk. Silakan masuk dulu untuk
+          melanjutkan.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Button asChild>
+            <Link href="/login">Masuk</Link>
+          </Button>
+          <Button asChild variant="outline">
             <Link href="/">Ke beranda</Link>
           </Button>
         </div>

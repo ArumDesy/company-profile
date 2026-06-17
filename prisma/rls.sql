@@ -25,3 +25,9 @@ create policy "publik kirim messages"
   on messages for insert
   to anon, authenticated
   with check (true);
+
+drop policy if exists "authenticated hapus messages" on messages;
+create policy "authenticated hapus messages"
+  on messages for delete
+  to authenticated
+  using (true);

@@ -46,6 +46,7 @@ export const footerNav: { label: string; items: NavItem[] }[] = [
     items: [
       { title: "Ajukan proyek", href: "/contact" },
       { title: "Lihat hasil kerja", href: "/blog" },
+      { title: "Masuk ke admin", href: "/login" },
     ],
   },
 ]
