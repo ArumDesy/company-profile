@@ -63,7 +63,7 @@ export function PostEditor({
         <TabsTrigger value="preview">Pratinjau</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="write">
+      <TabsContent value="write" forceMount className="data-[state=inactive]:hidden">
         <ContextMenu>
           <ContextMenuTrigger asChild>
             <div
@@ -102,7 +102,7 @@ export function PostEditor({
         </ContextMenu>
       </TabsContent>
 
-      <TabsContent value="preview">
+      <TabsContent value="preview" forceMount className="data-[state=inactive]:hidden">
         <div className="min-h-[320px] border border-border bg-card px-4 py-4">
           {value.trim() ? (
             <MarkdownContent markdown={value} />

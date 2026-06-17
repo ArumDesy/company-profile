@@ -22,7 +22,7 @@ export function highlightText(text: string, query: string): ReactNode {
       return (
         <mark
           key={index}
-          className="rounded-[1px] bg-measure/30 px-0.5 text-foreground"
+          className="rounded-[1px] bg-measure px-1 font-semibold text-measure-foreground"
         >
           {part}
         </mark>

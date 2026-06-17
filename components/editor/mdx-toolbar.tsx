@@ -16,6 +16,11 @@ import {
 import { SquareCodeIcon, SigmaIcon, WorkflowIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 function InsertBlockButtons() {
   const insertCodeBlock = usePublisher(insertCodeBlock$)
@@ -29,19 +34,22 @@ function InsertBlockButtons() {
   return (
     <>
       {items.map((item) => (
-        <Button
-          key={item.key}
-          type="button"
-          variant="ghost"
-          size="icon-sm"
-          title={item.label}
-          aria-label={item.label}
-          onClick={() =>
-            insertCodeBlock({ language: item.language, code: "", meta: "" })
-          }
-        >
-          <item.icon className="size-4" />
-        </Button>
+        <Tooltip key={item.key}>
+          <TooltipTrigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              aria-label={item.label}
+              onClick={() =>
+                insertCodeBlock({ language: item.language, code: "", meta: "" })
+              }
+            >
+              <item.icon className="size-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>{item.label}</TooltipContent>
+        </Tooltip>
       ))}
     </>
   )

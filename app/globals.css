@@ -261,6 +261,64 @@
   font-size: 0.75rem;
   top: 0.2em;
 }
+.prose-blueprint ol {
+  list-style: none;
+  counter-reset: blueprint-counter;
+  padding-left: 0;
+  margin-bottom: 1.25rem;
+}
+.prose-blueprint ol li {
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: 0.5rem;
+  color: var(--muted-foreground);
+  counter-increment: blueprint-counter;
+}
+.prose-blueprint ol li::before {
+  content: counter(blueprint-counter) ".";
+  position: absolute;
+  left: 0;
+  color: var(--measure-ink);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  top: 0.15em;
+}
+.prose-blueprint ul.contains-task-list {
+  padding-left: 0;
+}
+.prose-blueprint li.task-list-item {
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.prose-blueprint li.task-list-item::before {
+  content: none;
+}
+.prose-blueprint li.task-list-item input[type="checkbox"] {
+  appearance: none;
+  margin-top: 0.3em;
+  height: 0.95rem;
+  width: 0.95rem;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  border-radius: 0;
+}
+.prose-blueprint li.task-list-item input[type="checkbox"]:checked {
+  background: var(--measure);
+  border-color: var(--measure);
+}
+.prose-blueprint li.task-list-item input[type="checkbox"]:checked::after {
+  content: "✓";
+  display: block;
+  text-align: center;
+  line-height: 0.85rem;
+  font-size: 0.7rem;
+  color: var(--measure-foreground);
+}
 .prose-blueprint pre {
   background: var(--paper-sunken);
   border: 1px solid var(--line-200);
@@ -410,6 +468,69 @@
 .mdx-toolbar [role="combobox"],
 .mdx-toolbar select {
   border-radius: 0;
+}
+
+.mdx-content ul,
+.mdx-content ol {
+  padding-left: 1.5rem;
+}
+.mdx-content ul {
+  list-style: disc;
+}
+.mdx-content ol {
+  list-style: decimal;
+  counter-reset: none;
+}
+.mdx-content ul > li,
+.mdx-content ol > li {
+  position: static;
+  padding-left: 0.25rem;
+  color: var(--foreground);
+}
+.mdx-content ul > li::before,
+.mdx-content ol > li::before {
+  content: none;
+}
+.mdx-content ul > li::marker,
+.mdx-content ol > li::marker {
+  color: var(--measure-ink);
+  font-family: var(--font-mono);
+}
+.mdx-content li[role="checkbox"] {
+  list-style: none;
+}
+.mdx-content input[type="checkbox"],
+.mdx-content li[role="checkbox"]::before {
+  appearance: none;
+  height: 0.95rem;
+  width: 0.95rem;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  border-radius: 0;
+}
+.mdx-content input[type="checkbox"]:checked,
+.mdx-content li[role="checkbox"][aria-checked="true"]::before {
+  background: var(--measure);
+  border-color: var(--measure);
+}
+
+.mdxeditor [class*="tooltipContent"],
+.mdxeditor-popup-container [class*="tooltipContent"],
+[class*="_tooltipContent"] {
+  border-radius: 0 !important;
+  border: 1px solid var(--foreground) !important;
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  box-shadow: 3px 3px 0 0 var(--foreground) !important;
+  padding: 0.25rem 0.5rem !important;
+}
+.mdxeditor [class*="selectTrigger"],
+.mdxeditor [class*="selectContainer"] {
+  border-radius: 0 !important;
 }
 
 .reveal {

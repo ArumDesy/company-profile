@@ -1,10 +1,10 @@
-create extension if not exists pg_trgm;
-create extension if not exists fuzzystrmatch;
+create schema if not exists extensions;
+create extension if not exists pg_trgm with schema extensions;
 
-create index if not exists posts_title_trgm on posts using gin (title gin_trgm_ops);
-create index if not exists posts_excerpt_trgm on posts using gin (excerpt gin_trgm_ops);
-create index if not exists messages_name_trgm on messages using gin (name gin_trgm_ops);
-create index if not exists messages_content_trgm on messages using gin (content gin_trgm_ops);
+create index if not exists posts_title_trgm on posts using gin (title extensions.gin_trgm_ops);
+create index if not exists posts_excerpt_trgm on posts using gin (excerpt extensions.gin_trgm_ops);
+create index if not exists messages_name_trgm on messages using gin (name extensions.gin_trgm_ops);
+create index if not exists messages_content_trgm on messages using gin (content extensions.gin_trgm_ops);
 
 create or replace function search_posts(
   search text,
@@ -24,7 +24,7 @@ returns table (
 )
 language sql
 stable
-set search_path = public
+set search_path = public, extensions
 as $$
   with q as (select nullif(trim(search), '') as term)
   select
@@ -63,7 +63,7 @@ returns table (
 )
 language sql
 stable
-set search_path = public
+set search_path = public, extensions
 as $$
   with q as (select nullif(trim(search), '') as term)
   select
