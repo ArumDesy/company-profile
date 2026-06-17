@@ -5,7 +5,7 @@ import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { siteConfig } from "@/config/site"
 import { getAllPosts, getPostBySlug } from "@/lib/posts"
-import { ArticleContent } from "@/components/blog/article-content"
+import { MarkdownContent } from "@/components/blog/markdown-content"
 
 export const revalidate = 60
 
@@ -113,7 +113,7 @@ export default async function BlogPostPage({ params }: Props) {
 
         <hr className="border-border mb-8" />
 
-        <ArticleContent html={post.content} />
+        <MarkdownContent markdown={post.content} />
 
         <hr className="border-border mt-12 mb-8" />
 

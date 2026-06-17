@@ -11,14 +11,20 @@ import {
 } from "@/components/ui/collapsible"
 
 const toolbarHelp: { label: string; desc: string }[] = [
-  { label: "B / I", desc: "tebal & miring untuk menekankan kata" },
-  { label: "H2 / H3", desc: "judul bagian biar tulisan rapi terbagi" },
+  { label: "B / I / U", desc: "tebal, miring, garis bawah — sorot teks dulu" },
+  { label: "Tipe blok", desc: "ganti jadi judul, paragraf, atau kutipan" },
   { label: "Daftar", desc: "poin atau bernomor untuk urutan langkah" },
-  { label: "Kutipan", desc: "menyorot pernyataan penting" },
-  { label: "Kode sebaris", desc: "menandai satu kata teknis di tengah kalimat" },
-  { label: "Blok kode", desc: "potongan kode banyak baris, warnanya otomatis" },
-  { label: "Diagram", desc: "gambar alur/bagan dari teks (format Mermaid)" },
   { label: "Tautan", desc: "sorot teks, klik ikon rantai, tempel alamat" },
+  { label: "Blok kode", desc: "potongan kode banyak baris, warna otomatis" },
+  { label: "Rumus", desc: "tulis LaTeX, hasilnya langsung tampil di editor" },
+  { label: "Diagram", desc: "tulis Mermaid, bagannya muncul sambil mengetik" },
+]
+
+const shortcuts: { keys: string; desc: string }[] = [
+  { keys: "## ", desc: "judul bagian (## untuk H2, ### untuk H3)" },
+  { keys: "- ", desc: "memulai daftar berpoin" },
+  { keys: "**teks**", desc: "menebalkan teks" },
+  { keys: "$E=mc^2$", desc: "rumus singkat di tengah kalimat" },
 ]
 
 export function EditorGuide() {
@@ -45,7 +51,7 @@ export function EditorGuide() {
         <div className="space-y-4 border-t border-border px-4 py-4 text-sm">
           <p className="text-muted-foreground">
             Tak perlu paham kode. Pakai tombol di atas seperti aplikasi tulis
-            biasa — sorot teks dulu, lalu klik tombolnya.
+            biasa, atau ketik tanda di bawah dan teks otomatis terformat.
           </p>
           <dl className="grid gap-x-4 gap-y-1.5 sm:grid-cols-[8rem_1fr]">
             {toolbarHelp.map((item) => (
@@ -57,13 +63,28 @@ export function EditorGuide() {
               </div>
             ))}
           </dl>
+          <div className="space-y-1.5">
+            <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+              Pintasan ketik
+            </p>
+            <dl className="grid gap-x-4 gap-y-1.5 sm:grid-cols-[8rem_1fr]">
+              {shortcuts.map((item) => (
+                <div key={item.keys} className="contents">
+                  <dt className="font-mono text-xs font-semibold text-foreground">
+                    {item.keys}
+                  </dt>
+                  <dd className="text-muted-foreground">{item.desc}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
           <div className="space-y-2">
             <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
               Contoh diagram
             </p>
             <p className="text-muted-foreground">
-              Klik tombol Diagram, lalu tulis alurnya seperti ini — nanti otomatis
-              jadi bagan di artikel:
+              Klik tombol Diagram, lalu tulis alurnya seperti ini — bagannya
+              langsung muncul:
             </p>
             <pre className="overflow-x-auto border border-border bg-card p-3 font-mono text-xs text-foreground">
 {`flowchart LR

@@ -352,6 +352,66 @@
   color: var(--ink-500);
 }
 
+.prose-blueprint table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
+}
+.prose-blueprint th,
+.prose-blueprint td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.prose-blueprint th {
+  background: var(--paper-sunken);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.prose-blueprint .katex-display {
+  margin: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.prose-blueprint a {
+  color: var(--measure-ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.mdxeditor {
+  --font-body: var(--font-inter), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --baseBg: var(--card);
+  --basePageBg: var(--card);
+  background: var(--card);
+}
+.mdxeditor [class*="rootContentEditableWrapper"],
+.mdx-content {
+  min-height: 320px;
+}
+.mdx-content {
+  padding: 1rem 1.25rem;
+}
+.mdx-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  flex-wrap: wrap;
+  gap: 0.125rem;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--secondary);
+}
+.mdx-toolbar button,
+.mdx-toolbar [role="combobox"],
+.mdx-toolbar select {
+  border-radius: 0;
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(14px);

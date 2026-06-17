@@ -1,6 +1,6 @@
 "use client"
 
-import { useActionState, useEffect, useRef, useState } from "react"
+import { useActionState, useEffect, useState } from "react"
 import { useFormStatus } from "react-dom"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
-import { RichTextEditor } from "@/components/editor/rich-text-editor"
+import { ForwardRefEditor } from "@/components/editor/forward-ref-editor"
 import { EditorGuide } from "@/components/editor/editor-guide"
 
 const initialState: PostFormState = { status: "idle" }
@@ -41,9 +41,9 @@ export function PostForm({ mode, post }: PostFormProps) {
   const [state, formAction] = useActionState(action, initialState)
   const router = useRouter()
 
-  const [content, setContent] = useState(post?.content ?? "")
+  const initialMarkdown = post?.content ?? ""
+  const [content, setContent] = useState(initialMarkdown)
   const [published, setPublished] = useState(post?.published ?? false)
-  const contentInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (state.status === "error" && state.message && !state.fieldErrors) {
@@ -51,15 +51,9 @@ export function PostForm({ mode, post }: PostFormProps) {
     }
   }, [state])
 
-  useEffect(() => {
-    if (contentInputRef.current) {
-      contentInputRef.current.value = content
-    }
-  }, [content])
-
   return (
     <form action={formAction} noValidate className="space-y-6">
-      <input type="hidden" name="content" ref={contentInputRef} defaultValue={content} />
+      <input type="hidden" name="content" value={content} readOnly />
       <input type="hidden" name="published" value={published ? "on" : "false"} />
 
       <Field data-invalid={!!state.fieldErrors?.title || undefined}>
@@ -96,11 +90,19 @@ export function PostForm({ mode, post }: PostFormProps) {
       <div className="space-y-2">
         <FieldLabel htmlFor="content-editor">Isi artikel</FieldLabel>
         <EditorGuide />
-        <RichTextEditor
-          value={content}
-          onChange={setContent}
-          className={state.fieldErrors?.content ? "border-destructive" : ""}
-        />
+        <div
+          className={
+            state.fieldErrors?.content
+              ? "border border-destructive"
+              : "border border-border"
+          }
+        >
+          <ForwardRefEditor
+            markdown={initialMarkdown}
+            onChange={setContent}
+            placeholder="Tulis isi artikel di sini…"
+          />
+        </div>
         {state.fieldErrors?.content && (
           <FieldError id="content-error">{state.fieldErrors.content}</FieldError>
         )}

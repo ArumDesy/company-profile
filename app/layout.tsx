@@ -7,6 +7,7 @@ import { ScrollProgress } from "@/components/site/scroll-progress"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { siteConfig } from "@/config/site"
+import "katex/dist/katex.min.css"
 import "./globals.css"
 
 const inter = Inter({
