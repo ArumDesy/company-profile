@@ -4,9 +4,13 @@ import { useEditor, EditorContent } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import Link from "@tiptap/extension-link"
 import Placeholder from "@tiptap/extension-placeholder"
+import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight"
+import { common, createLowlight } from "lowlight"
 
 import { EditorToolbar } from "@/components/editor/editor-toolbar"
 import { cn } from "@/lib/utils"
+
+const lowlight = createLowlight(common)
 
 type RichTextEditorProps = {
   value: string
@@ -17,7 +21,8 @@ type RichTextEditorProps = {
 export function RichTextEditor({ value, onChange, className }: RichTextEditorProps) {
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({ codeBlock: false }),
+      CodeBlockLowlight.configure({ lowlight }),
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {

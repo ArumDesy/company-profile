@@ -66,9 +66,9 @@ export function SiteNavbar() {
               onFocus={() => moveTo(index)}
               onBlur={() => moveTo(activeIndex)}
               className={cn(
-                "rounded-md px-3 py-1.5 text-sm transition-colors hover:text-foreground",
+                "rounded-md px-3 py-1.5 font-mono text-xs uppercase tracking-widest transition-colors hover:text-foreground",
                 isActive(item.href, pathname)
-                  ? "font-medium text-foreground"
+                  ? "text-foreground"
                   : "text-muted-foreground"
               )}
             >
@@ -111,9 +111,9 @@ export function SiteNavbar() {
                     href={item.href}
                     onClick={() => setOpen(false)}
                     className={cn(
-                      "rounded-md px-3 py-2 text-sm transition-colors hover:bg-secondary hover:text-foreground",
+                      "rounded-md px-3 py-2 font-mono text-xs uppercase tracking-widest transition-colors hover:bg-secondary hover:text-foreground",
                       isActive(item.href, pathname)
-                        ? "bg-secondary font-medium text-foreground"
+                        ? "bg-secondary text-foreground"
                         : "text-muted-foreground"
                     )}
                   >

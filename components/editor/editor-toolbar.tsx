@@ -11,6 +11,8 @@ import {
   ListOrderedIcon,
   TextQuoteIcon,
   CodeIcon,
+  SquareCodeIcon,
+  WorkflowIcon,
   LinkIcon,
 } from "lucide-react"
 
@@ -159,9 +161,24 @@ export function EditorToolbar({ editor }: ToolbarProps) {
     {
       key: "code",
       icon: CodeIcon,
-      label: "Kode",
+      label: "Kode sebaris",
       active: () => editor.isActive("code"),
       action: () => editor.chain().focus().toggleCode().run(),
+    },
+    {
+      key: "codeBlock",
+      icon: SquareCodeIcon,
+      label: "Blok kode",
+      active: () => editor.isActive("codeBlock"),
+      action: () => editor.chain().focus().toggleCodeBlock().run(),
+    },
+    {
+      key: "diagram",
+      icon: WorkflowIcon,
+      label: "Diagram (Mermaid)",
+      active: () => editor.isActive("codeBlock", { language: "mermaid" }),
+      action: () =>
+        editor.chain().focus().toggleCodeBlock({ language: "mermaid" }).run(),
     },
   ]
 

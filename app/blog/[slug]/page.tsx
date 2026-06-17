@@ -5,7 +5,7 @@ import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { siteConfig } from "@/config/site"
 import { getAllPosts, getPostBySlug } from "@/lib/posts"
-import { sanitizeHtml } from "@/lib/sanitize"
+import { ArticleContent } from "@/components/blog/article-content"
 
 export const revalidate = 60
 
@@ -113,10 +113,7 @@ export default async function BlogPostPage({ params }: Props) {
 
         <hr className="border-border mb-8" />
 
-        <div
-          className="prose-blueprint"
-          dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
-        />
+        <ArticleContent html={post.content} />
 
         <hr className="border-border mt-12 mb-8" />
 

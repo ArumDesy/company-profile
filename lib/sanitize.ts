@@ -9,6 +9,6 @@ export function sanitizeHtml(html: string): string {
       "a", "code", "pre", "blockquote",
       "br", "hr", "img",
     ],
-    ALLOWED_ATTR: ["href", "target", "rel", "src", "alt"],
+    ALLOWED_ATTR: ["href", "target", "rel", "src", "alt", "class"],
   })
 }

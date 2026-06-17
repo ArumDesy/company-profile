@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { RichTextEditor } from "@/components/editor/rich-text-editor"
+import { EditorGuide } from "@/components/editor/editor-guide"
 
 const initialState: PostFormState = { status: "idle" }
 
@@ -94,6 +95,7 @@ export function PostForm({ mode, post }: PostFormProps) {
 
       <div className="space-y-2">
         <FieldLabel htmlFor="content-editor">Isi artikel</FieldLabel>
+        <EditorGuide />
         <RichTextEditor
           value={content}
           onChange={setContent}

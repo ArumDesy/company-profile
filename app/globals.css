@@ -284,6 +284,74 @@
   color: var(--foreground);
 }
 
+.hljs-comment,
+.hljs-quote {
+  color: var(--ink-400);
+  font-style: italic;
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-built_in,
+.hljs-name,
+.hljs-tag {
+  color: var(--measure-ink);
+}
+.hljs-string,
+.hljs-title,
+.hljs-section,
+.hljs-attribute,
+.hljs-literal,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-addition {
+  color: var(--signal-600);
+}
+.hljs-number,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link,
+.hljs-meta,
+.hljs-deletion {
+  color: var(--measure-600);
+}
+.hljs-title.function_,
+.hljs-function .hljs-title,
+.hljs-attr {
+  color: var(--ink-900);
+  font-weight: 600;
+}
+.hljs-emphasis {
+  font-style: italic;
+}
+.hljs-strong {
+  font-weight: 700;
+}
+
+.mermaid-diagram {
+  border: 1px solid var(--border);
+  background: var(--paper-raised);
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+}
+.mermaid-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+.mermaid-fallback {
+  background: var(--paper-sunken);
+  border: 1px solid var(--line-200);
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink-500);
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(14px);
@@ -297,12 +365,13 @@
 }
 
 .lift-brutal {
-  transition: transform 0.14s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.14s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 0 0 var(--foreground);
+  transition: box-shadow 0.16s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.16s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .lift-brutal:hover {
-  transform: translate(-3px, -3px);
   box-shadow: 6px 6px 0 0 var(--foreground);
+  border-color: var(--foreground);
 }
 
 @keyframes survey-scan {
