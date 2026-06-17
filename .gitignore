@@ -50,3 +50,4 @@ CLAUDE.md
 
 # Prisma generated client
 /generated/
+.vercel
