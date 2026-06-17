@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Logo } from "@/components/brand/logo"
 import { mainNav, siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 
@@ -42,12 +43,8 @@ export function SiteNavbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm">
       <nav className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 md:px-6">
-        <Link
-          href="/"
-          className="flex items-baseline gap-0.5 text-base font-semibold tracking-tight text-foreground"
-        >
-          <span className="font-display font-bold">{siteConfig.name}</span>
-          <span className="text-measure-ink text-lg leading-none">.</span>
+        <Link href="/" aria-label={siteConfig.name} className="text-foreground">
+          <Logo />
         </Link>
 
         <div

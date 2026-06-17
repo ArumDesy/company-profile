@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google"
 
 import { SiteFooter } from "@/components/site/footer"
@@ -61,12 +61,20 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#e2e8f0" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e151d" },
+  ],
+}
+
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: siteConfig.legalName,
   alternateName: siteConfig.name,
   url: siteConfig.url,
+  logo: `${siteConfig.url}/brand/rakitan-icon-512.png`,
   description: siteConfig.description,
   email: siteConfig.contact.email,
   foundingDate: siteConfig.founded,

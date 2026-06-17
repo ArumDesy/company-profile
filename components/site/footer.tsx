@@ -3,6 +3,7 @@ import Link from "next/link"
 import { siteConfig, footerNav } from "@/config/site"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { Logo } from "@/components/brand/logo"
 
 function IconGithub({ className }: { className?: string }) {
   return (
@@ -36,8 +37,8 @@ export function SiteFooter() {
       <div className="mx-auto max-w-5xl px-4 py-12 md:px-6">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="inline-block font-display text-lg font-bold">
-              {siteConfig.name}<span className="text-measure-ink">.</span>
+            <Link href="/" aria-label={siteConfig.name} className="inline-flex text-foreground">
+              <Logo markClassName="size-7" />
             </Link>
             <p className="mt-2 max-w-[18ch] text-sm text-muted-foreground leading-relaxed">
               {siteConfig.tagline}
