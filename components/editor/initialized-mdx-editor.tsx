@@ -16,7 +16,6 @@ import {
   codeMirrorPlugin,
   toolbarPlugin,
 } from "@mdxeditor/editor"
-import "@mdxeditor/editor/style.css"
 
 import { MdxToolbar } from "@/components/editor/mdx-toolbar"
 import { MathBlockEditor } from "@/components/editor/math-block-editor"

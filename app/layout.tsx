@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { siteConfig } from "@/config/site"
 import "katex/dist/katex.min.css"
+import "@mdxeditor/editor/style.css"
 import "./globals.css"
 
 const inter = Inter({
