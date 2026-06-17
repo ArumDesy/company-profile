@@ -1,8 +1,9 @@
 "use server"
 
-import { redirect, unauthorized } from "next/navigation"
+import { forbidden, redirect, unauthorized } from "next/navigation"
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/lib/supabase/server"
+import { isAdminEmail } from "@/lib/auth/admin"
 import { postSchema } from "@/lib/validations/post"
 
 export type PostFormState = {
@@ -30,6 +31,7 @@ export async function createPost(
   } = await supabase.auth.getUser()
 
   if (!user) return unauthorized()
+  if (!isAdminEmail(user.email)) return forbidden()
 
   const raw = {
     title: formData.get("title"),
@@ -91,6 +93,7 @@ export async function updatePost(
   } = await supabase.auth.getUser()
 
   if (!user) return unauthorized()
+  if (!isAdminEmail(user.email)) return forbidden()
 
   const raw = {
     title: formData.get("title"),
@@ -157,7 +160,9 @@ export async function deletePost(
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) return { ok: false, message: "Tidak terautentikasi." }
+  if (!user || !isAdminEmail(user.email)) {
+    return { ok: false, message: "Tidak punya akses." }
+  }
 
   const { data: existing } = await supabase
     .from("posts")
@@ -187,7 +192,9 @@ export async function togglePublish(
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) return { ok: false, message: "Tidak terautentikasi." }
+  if (!user || !isAdminEmail(user.email)) {
+    return { ok: false, message: "Tidak punya akses." }
+  }
 
   const { data: existing } = await supabase
     .from("posts")

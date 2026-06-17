@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/lib/supabase/server"
+import { isAdminEmail } from "@/lib/auth/admin"
 import { loginSchema, registerSchema } from "@/lib/validations/auth"
 
 export type AuthState = {
@@ -38,7 +39,7 @@ export async function signIn(
     nextRaw.startsWith("/") && !nextRaw.startsWith("//") ? nextRaw : "/dashboard"
 
   const supabase = await createClient()
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email: result.data.email,
     password: result.data.password,
   })
@@ -47,6 +48,14 @@ export async function signIn(
     return {
       status: "error",
       message: "Email atau kata sandi salah.",
+    }
+  }
+
+  if (!isAdminEmail(data.user?.email)) {
+    await supabase.auth.signOut()
+    return {
+      status: "error",
+      message: "Akun ini tidak punya akses admin.",
     }
   }
 

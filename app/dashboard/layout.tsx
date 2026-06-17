@@ -1,8 +1,9 @@
-import { redirect } from "next/navigation"
+import { forbidden, redirect } from "next/navigation"
 import Link from "next/link"
 import { LogOutIcon, TerminalSquareIcon } from "lucide-react"
 
 import { createClient } from "@/lib/supabase/server"
+import { isAdminEmail } from "@/lib/auth/admin"
 import { signOut } from "@/lib/actions/auth"
 import { Button } from "@/components/ui/button"
 import { DashboardNav } from "@/components/dashboard/dashboard-nav"
@@ -19,6 +20,7 @@ export default async function DashboardLayout({
   } = await supabase.auth.getUser()
 
   if (!user) redirect("/login?next=/dashboard")
+  if (!isAdminEmail(user.email)) forbidden()
 
   const email = user.email ?? ""
 

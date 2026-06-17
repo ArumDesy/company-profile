@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/lib/supabase/server"
+import { isAdminEmail } from "@/lib/auth/admin"
 
 export async function deleteMessage(
   id: string
@@ -11,7 +12,9 @@ export async function deleteMessage(
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) return { ok: false, message: "Tidak terautentikasi." }
+  if (!user || !isAdminEmail(user.email)) {
+    return { ok: false, message: "Tidak punya akses." }
+  }
 
   const { error } = await supabase.from("messages").delete().eq("id", id)
 

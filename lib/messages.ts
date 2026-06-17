@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
+import { isAdminEmail } from "@/lib/auth/admin"
 
 export type Message = {
   id: string
@@ -14,7 +15,7 @@ export async function getMessages(query?: string): Promise<Message[]> {
     const {
       data: { user },
     } = await supabase.auth.getUser()
-    if (!user) return []
+    if (!isAdminEmail(user?.email)) return []
 
     let req = supabase
       .from("messages")

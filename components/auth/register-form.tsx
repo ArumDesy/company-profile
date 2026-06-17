@@ -9,6 +9,7 @@ import { signUp, type AuthState } from "@/lib/actions/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
+import { GoogleButton } from "@/components/auth/google-button"
 
 const initialState: AuthState = { status: "idle" }
 
@@ -55,7 +56,18 @@ export function RegisterForm() {
   }
 
   return (
-    <form action={formAction} noValidate className="space-y-5">
+    <div className="space-y-5">
+      <GoogleButton />
+
+      <div className="flex items-center gap-3">
+        <span className="h-px flex-1 bg-border" />
+        <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+          atau
+        </span>
+        <span className="h-px flex-1 bg-border" />
+      </div>
+
+      <form action={formAction} noValidate className="space-y-5">
       <Field data-invalid={!!state.fieldErrors?.email || undefined}>
         <FieldLabel htmlFor="email">Email</FieldLabel>
         <Input
@@ -116,6 +128,7 @@ export function RegisterForm() {
           <Link href="/login">Masuk</Link>
         </Button>
       </p>
-    </form>
+      </form>
+    </div>
   )
 }

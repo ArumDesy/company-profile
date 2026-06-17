@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string }>
+  searchParams: Promise<{ next?: string; error?: string }>
 }) {
-  const { next } = await searchParams
+  const { next, error } = await searchParams
   const redirectTo = next ?? "/dashboard"
 
   return (
@@ -26,7 +26,7 @@ export default async function LoginPage({
             <h1 className="mt-1 text-xl font-bold">Masuk ke dashboard</h1>
           </div>
           <div className="px-6 py-6">
-            <LoginForm next={redirectTo} />
+            <LoginForm next={redirectTo} error={error} />
           </div>
         </div>
       </div>

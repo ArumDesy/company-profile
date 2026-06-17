@@ -9,8 +9,14 @@ import { signIn, type AuthState } from "@/lib/actions/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
+import { GoogleButton } from "@/components/auth/google-button"
 
 const initialState: AuthState = { status: "idle" }
+
+const oauthErrors: Record<string, string> = {
+  denied: "Akun Google ini tidak punya akses admin.",
+  oauth: "Login Google gagal. Coba lagi.",
+}
 
 function SubmitButton() {
   const { pending } = useFormStatus()
@@ -21,7 +27,7 @@ function SubmitButton() {
   )
 }
 
-export function LoginForm({ next }: { next: string }) {
+export function LoginForm({ next, error }: { next: string; error?: string }) {
   const [state, formAction] = useActionState(signIn, initialState)
 
   useEffect(() => {
@@ -30,9 +36,26 @@ export function LoginForm({ next }: { next: string }) {
     }
   }, [state])
 
+  useEffect(() => {
+    if (error && oauthErrors[error]) {
+      toast.error(oauthErrors[error])
+    }
+  }, [error])
+
   return (
-    <form action={formAction} noValidate className="space-y-5">
-      <input type="hidden" name="next" value={next} />
+    <div className="space-y-5">
+      <GoogleButton next={next} />
+
+      <div className="flex items-center gap-3">
+        <span className="h-px flex-1 bg-border" />
+        <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+          atau
+        </span>
+        <span className="h-px flex-1 bg-border" />
+      </div>
+
+      <form action={formAction} noValidate className="space-y-5">
+        <input type="hidden" name="next" value={next} />
 
       <Field data-invalid={!!state.fieldErrors?.email || undefined}>
         <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -76,6 +99,7 @@ export function LoginForm({ next }: { next: string }) {
           <Link href="/register">Daftar</Link>
         </Button>
       </p>
-    </form>
+      </form>
+    </div>
   )
 }

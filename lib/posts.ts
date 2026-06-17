@@ -1,5 +1,6 @@
 import { createPublicClient } from "@/lib/supabase/public"
 import { createClient } from "@/lib/supabase/server"
+import { isAdminEmail } from "@/lib/auth/admin"
 
 export type Post = {
   id: string
@@ -50,7 +51,7 @@ export async function getPostsForAdmin(): Promise<Post[]> {
     const {
       data: { user },
     } = await supabase.auth.getUser()
-    if (!user) return []
+    if (!isAdminEmail(user?.email)) return []
 
     const { data, error } = await supabase
       .from("posts")
@@ -70,7 +71,7 @@ export async function getPostByIdForAdmin(id: string): Promise<Post | null> {
     const {
       data: { user },
     } = await supabase.auth.getUser()
-    if (!user) return null
+    if (!isAdminEmail(user?.email)) return null
 
     const { data, error } = await supabase
       .from("posts")
