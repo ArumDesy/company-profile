@@ -101,6 +101,14 @@ export async function signUp(
   }
 
   if (data.session) {
+    if (!isAdminEmail(data.user?.email)) {
+      await supabase.auth.signOut()
+      return {
+        status: "error",
+        message: "Akun ini tidak punya akses admin.",
+      }
+    }
+
     revalidatePath("/dashboard", "layout")
     redirect("/dashboard")
   }
