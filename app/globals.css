@@ -510,6 +510,37 @@
   z-index: 50 !important;
 }
 
+.mdx-content [class*="codeMirrorWrapper"],
+.mdx-content [class*="codeMirrorToolbar"] {
+  background: var(--secondary);
+}
+.mdx-content .cm-editor {
+  background: var(--secondary);
+  border: 1px solid var(--border);
+}
+.mdx-content .cm-editor .cm-content {
+  color: var(--foreground);
+  caret-color: var(--measure-ink);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+.mdx-content .cm-editor .cm-gutters {
+  background: var(--secondary);
+  border-right: 1px solid var(--border);
+  color: var(--ink-400);
+}
+.mdx-content .cm-editor .cm-activeLine,
+.mdx-content .cm-editor .cm-activeLineGutter {
+  background: color-mix(in srgb, var(--measure) 10%, transparent);
+}
+.mdx-content .cm-editor .cm-lineNumbers .cm-gutterElement {
+  color: var(--ink-400);
+}
+.mdx-content .cm-editor .cm-selectionBackground,
+.mdx-content .cm-editor.cm-focused .cm-selectionBackground {
+  background: color-mix(in srgb, var(--measure) 22%, transparent) !important;
+}
+
 .mdxeditor [class*="tooltipContent"],
 .mdxeditor-popup-container [class*="tooltipContent"],
 [class*="_tooltipContent"] {

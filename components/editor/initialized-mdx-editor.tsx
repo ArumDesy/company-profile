@@ -20,6 +20,7 @@ import {
 import { MdxToolbar } from "@/components/editor/mdx-toolbar"
 import { MathBlockEditor } from "@/components/editor/math-block-editor"
 import { MermaidBlockEditor } from "@/components/editor/mermaid-block-editor"
+import { codeMirrorTheme } from "@/lib/codemirror-theme"
 
 const codeBlockLanguages = {
   txt: "Teks",
@@ -67,7 +68,10 @@ export default function InitializedMDXEditor({
             },
           ],
         }),
-        codeMirrorPlugin({ codeBlockLanguages }),
+        codeMirrorPlugin({
+          codeBlockLanguages,
+          codeMirrorExtensions: codeMirrorTheme,
+        }),
         toolbarPlugin({
           toolbarClassName: "mdx-toolbar",
           toolbarContents: () => <MdxToolbar />,
