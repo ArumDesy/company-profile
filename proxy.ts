@@ -3,7 +3,19 @@ import { createServerClient } from "@supabase/ssr"
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl
+  const { pathname, searchParams } = request.nextUrl
+
+  const oauthError = searchParams.get("error")
+  const oauthErrorCode = searchParams.get("error_code")
+  const oauthErrorDesc = searchParams.get("error_description")
+  const isOAuthError = Boolean(oauthErrorCode || (oauthError && oauthErrorDesc))
+
+  if (isOAuthError && pathname !== "/login") {
+    const loginUrl = new URL("/login", request.url)
+    if (oauthErrorCode) loginUrl.searchParams.set("error_code", oauthErrorCode)
+    if (oauthError) loginUrl.searchParams.set("error", oauthError)
+    return NextResponse.redirect(loginUrl)
+  }
 
   if (pathname.startsWith("/dashboard")) {
     const supabase = createServerClient(
