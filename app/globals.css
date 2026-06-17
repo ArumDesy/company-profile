@@ -252,7 +252,7 @@
   margin-bottom: 0.5rem;
   color: var(--muted-foreground);
 }
-.prose-blueprint ul li::before {
+.prose-blueprint ul li:not(.task-list-item):not([class*="listItem"])::before {
   content: "→";
   position: absolute;
   left: 0;
@@ -470,48 +470,33 @@
   border-radius: 0;
 }
 
-.mdx-content ul,
-.mdx-content ol {
-  padding-left: 1.5rem;
+.mdxeditor {
+  --accentSolid: var(--measure);
+  --accentBorder: var(--measure);
+  --accentBg: var(--measure);
+  --baseBorder: var(--border);
+  --baseBase: var(--measure-foreground);
+  --radius-small: 0px;
+  --radius-base: 0px;
+  --radius-medium: 0px;
+  --radius-large: 0px;
 }
-.mdx-content ul {
-  list-style: disc;
-}
-.mdx-content ol {
-  list-style: decimal;
-  counter-reset: none;
-}
-.mdx-content ul > li,
-.mdx-content ol > li {
-  position: static;
-  padding-left: 0.25rem;
+.mdx-content [class*="listItemChecked"],
+.mdx-content [class*="listItemUnchecked"] {
   color: var(--foreground);
 }
-.mdx-content ul > li::before,
-.mdx-content ol > li::before {
-  content: none;
+.mdx-content [class*="listItemUnchecked"]::before {
+  border: 1.5px solid var(--border) !important;
+  border-radius: 0 !important;
+  background-color: var(--card) !important;
 }
-.mdx-content ul > li::marker,
-.mdx-content ol > li::marker {
-  color: var(--measure-ink);
-  font-family: var(--font-mono);
+.mdx-content [class*="listItemChecked"]::before {
+  border: 1.5px solid var(--measure) !important;
+  border-radius: 0 !important;
+  background-color: var(--measure) !important;
 }
-.mdx-content li[role="checkbox"] {
-  list-style: none;
-}
-.mdx-content input[type="checkbox"],
-.mdx-content li[role="checkbox"]::before {
-  appearance: none;
-  height: 0.95rem;
-  width: 0.95rem;
-  border: 1.5px solid var(--border);
-  background: var(--card);
-  border-radius: 0;
-}
-.mdx-content input[type="checkbox"]:checked,
-.mdx-content li[role="checkbox"][aria-checked="true"]::before {
-  background: var(--measure);
-  border-color: var(--measure);
+.mdx-content [class*="listItemChecked"]::after {
+  border-color: var(--measure-foreground) !important;
 }
 
 .mdxeditor [class*="tooltipContent"],

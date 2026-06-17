@@ -9,15 +9,8 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuLabel,
-  ContextMenuSeparator,
-  ContextMenuTrigger,
-} from "@/components/ui/context-menu"
 import { ForwardRefEditor } from "@/components/editor/forward-ref-editor"
+import { EditorContextMenu } from "@/components/editor/editor-context-menu"
 import { MarkdownContent } from "@/components/blog/markdown-content"
 
 type PostEditorProps = {
@@ -27,22 +20,6 @@ type PostEditorProps = {
   invalid?: boolean
 }
 
-const inlineInsertions = [
-  { label: "Judul bagian", markdown: "\n## Judul bagian\n" },
-  { label: "Daftar poin", markdown: "\n- poin pertama\n" },
-  { label: "Kutipan", markdown: "\n> kutipan\n" },
-  { label: "Tautan", markdown: "[teks tautan](https://)" },
-]
-
-const blockInsertions = [
-  { label: "Blok kode", markdown: "\n```ts\n\n```\n" },
-  { label: "Rumus (LaTeX)", markdown: "\n```math\nE = mc^2\n```\n" },
-  {
-    label: "Diagram (Mermaid)",
-    markdown: "\n```mermaid\nflowchart LR\n  A --> B\n```\n",
-  },
-]
-
 export function PostEditor({
   initialMarkdown,
   value,
@@ -50,11 +27,6 @@ export function PostEditor({
   invalid,
 }: PostEditorProps) {
   const editorRef = useRef<MDXEditorMethods>(null)
-
-  const insert = (markdown: string) => {
-    editorRef.current?.focus()
-    editorRef.current?.insertMarkdown(markdown)
-  }
 
   return (
     <Tabs defaultValue="write">
@@ -64,42 +36,18 @@ export function PostEditor({
       </TabsList>
 
       <TabsContent value="write" forceMount className="data-[state=inactive]:hidden">
-        <ContextMenu>
-          <ContextMenuTrigger asChild>
-            <div
-              className={invalid ? "border border-destructive" : "border border-border"}
-            >
-              <ForwardRefEditor
-                ref={editorRef}
-                markdown={initialMarkdown}
-                onChange={onChange}
-                placeholder="Tulis isi artikel di sini…"
-              />
-            </div>
-          </ContextMenuTrigger>
-          <ContextMenuContent className="w-56">
-            <ContextMenuLabel className="font-mono text-xs uppercase tracking-widest">
-              Sisipkan
-            </ContextMenuLabel>
-            {inlineInsertions.map((item) => (
-              <ContextMenuItem
-                key={item.label}
-                onSelect={() => insert(item.markdown)}
-              >
-                {item.label}
-              </ContextMenuItem>
-            ))}
-            <ContextMenuSeparator />
-            {blockInsertions.map((item) => (
-              <ContextMenuItem
-                key={item.label}
-                onSelect={() => insert(item.markdown)}
-              >
-                {item.label}
-              </ContextMenuItem>
-            ))}
-          </ContextMenuContent>
-        </ContextMenu>
+        <EditorContextMenu editorRef={editorRef}>
+          <div
+            className={invalid ? "border border-destructive" : "border border-border"}
+          >
+            <ForwardRefEditor
+              ref={editorRef}
+              markdown={initialMarkdown}
+              onChange={onChange}
+              placeholder="Tulis isi artikel di sini…"
+            />
+          </div>
+        </EditorContextMenu>
       </TabsContent>
 
       <TabsContent value="preview" forceMount className="data-[state=inactive]:hidden">
