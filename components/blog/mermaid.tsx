@@ -10,6 +10,7 @@ export function Mermaid({ chart }: { chart: string }) {
 
   useEffect(() => {
     let active = true
+    setStatus("loading")
 
     import("mermaid")
       .then(({ default: mermaid }) => {
@@ -41,13 +42,12 @@ export function Mermaid({ chart }: { chart: string }) {
 
   return (
     <div className="mermaid-diagram" role="img" aria-label="Diagram alur">
-      <div ref={ref}>
-        {status === "loading" && (
-          <span className="font-mono text-xs text-muted-foreground">
-            Memuat diagram…
-          </span>
-        )}
-      </div>
+      <div ref={ref} aria-hidden={status !== "ready"} />
+      {status === "loading" && (
+        <span className="font-mono text-xs text-muted-foreground">
+          Memuat diagram…
+        </span>
+      )}
     </div>
   )
 }
