@@ -1,112 +1,89 @@
 "use client"
 
-import { useState } from "react"
+import { useActionState, useEffect, useRef } from "react"
+import { useFormStatus } from "react-dom"
 import { toast } from "sonner"
 
+import { submitContact, type ContactState } from "@/lib/actions/contact"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Field, FieldLabel, FieldDescription, FieldError } from "@/components/ui/field"
+import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field"
 
-type FormFields = {
-  name: string
-  email: string
-  message: string
-}
+const initialState: ContactState = { status: "idle" }
 
-type FieldErrors = Partial<Record<keyof FormFields, string>>
-
-const emptyForm: FormFields = { name: "", email: "", message: "" }
-
-function validateForm(fields: FormFields): FieldErrors {
-  const errors: FieldErrors = {}
-  if (!fields.name.trim()) errors.name = "Nama tidak boleh kosong."
-  if (!fields.email.trim()) {
-    errors.email = "Email tidak boleh kosong."
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) {
-    errors.email = "Format email belum benar. Cek lagi."
-  }
-  if (!fields.message.trim()) errors.message = "Pesan tidak boleh kosong."
-  else if (fields.message.trim().length < 10) errors.message = "Pesan terlalu pendek — tulis sedikit lebih."
-  return errors
+function SubmitButton() {
+  const { pending } = useFormStatus()
+  return (
+    <Button type="submit" disabled={pending} className="w-full sm:w-auto">
+      {pending ? "Mengirim…" : "Kirim pesan"}
+    </Button>
+  )
 }
 
 export function ContactForm() {
-  const [fields, setFields] = useState<FormFields>(emptyForm)
-  const [errors, setErrors] = useState<FieldErrors>({})
+  const [state, formAction] = useActionState(submitContact, initialState)
+  const formRef = useRef<HTMLFormElement>(null)
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    const { name, value } = e.target
-    setFields((prev) => ({ ...prev, [name]: value }))
-    if (errors[name as keyof FormFields]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }))
+  useEffect(() => {
+    if (state.status === "success") {
+      toast.success(state.message)
+      formRef.current?.reset()
+    } else if (state.status === "error" && state.message && !state.fieldErrors) {
+      toast.error(state.message)
     }
-  }
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    const fieldErrors = validateForm(fields)
-    if (Object.keys(fieldErrors).length > 0) {
-      setErrors(fieldErrors)
-      return
-    }
-    toast.success("Pesan kamu masuk. Kami balas lewat email.")
-    setFields(emptyForm)
-    setErrors({})
-  }
+  }, [state])
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-5">
-      <Field data-invalid={!!errors.name || undefined}>
+    <form ref={formRef} action={formAction} noValidate className="space-y-5">
+      <Field data-invalid={!!state.fieldErrors?.name || undefined}>
         <FieldLabel htmlFor="name">Nama</FieldLabel>
         <Input
           id="name"
           name="name"
-          value={fields.name}
-          onChange={handleChange}
           placeholder="Nama kamu atau perusahaan"
           autoComplete="name"
-          aria-invalid={!!errors.name}
-          aria-describedby={errors.name ? "name-error" : undefined}
+          aria-invalid={!!state.fieldErrors?.name}
+          aria-describedby={state.fieldErrors?.name ? "name-error" : undefined}
         />
-        {errors.name && <FieldError id="name-error">{errors.name}</FieldError>}
+        {state.fieldErrors?.name && (
+          <FieldError id="name-error">{state.fieldErrors.name}</FieldError>
+        )}
       </Field>
 
-      <Field data-invalid={!!errors.email || undefined}>
+      <Field data-invalid={!!state.fieldErrors?.email || undefined}>
         <FieldLabel htmlFor="email">Email</FieldLabel>
         <Input
           id="email"
           name="email"
           type="email"
-          value={fields.email}
-          onChange={handleChange}
           placeholder="email@perusahaan.com"
           autoComplete="email"
-          aria-invalid={!!errors.email}
-          aria-describedby={errors.email ? "email-error" : undefined}
+          aria-invalid={!!state.fieldErrors?.email}
+          aria-describedby={state.fieldErrors?.email ? "email-error" : undefined}
         />
         <FieldDescription>Kami balas ke sini, biasanya dalam satu hari kerja.</FieldDescription>
-        {errors.email && <FieldError id="email-error">{errors.email}</FieldError>}
+        {state.fieldErrors?.email && (
+          <FieldError id="email-error">{state.fieldErrors.email}</FieldError>
+        )}
       </Field>
 
-      <Field data-invalid={!!errors.message || undefined}>
+      <Field data-invalid={!!state.fieldErrors?.message || undefined}>
         <FieldLabel htmlFor="message">Pesan</FieldLabel>
         <Textarea
           id="message"
           name="message"
-          value={fields.message}
-          onChange={handleChange}
           placeholder="Ceritakan proyeknya — scope, tahap sekarang, dan apa yang ingin dicapai."
           rows={5}
-          aria-invalid={!!errors.message}
-          aria-describedby={errors.message ? "message-error" : undefined}
+          aria-invalid={!!state.fieldErrors?.message}
+          aria-describedby={state.fieldErrors?.message ? "message-error" : undefined}
         />
-        {errors.message && <FieldError id="message-error">{errors.message}</FieldError>}
+        {state.fieldErrors?.message && (
+          <FieldError id="message-error">{state.fieldErrors.message}</FieldError>
+        )}
       </Field>
 
-      <Button type="submit" className="w-full sm:w-auto">
-        Kirim pesan
-      </Button>
+      <SubmitButton />
     </form>
   )
 }

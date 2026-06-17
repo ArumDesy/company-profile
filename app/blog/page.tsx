@@ -7,6 +7,8 @@ import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/comp
 import { siteConfig } from "@/config/site"
 import { getAllPosts } from "@/lib/posts"
 
+export const revalidate = 60
+
 export const metadata: Metadata = {
   title: "Catatan teknis",
   description:
@@ -26,8 +28,8 @@ function formatDate(dateString: string): string {
   }).format(new Date(dateString))
 }
 
-export default function BlogPage() {
-  const posts = getAllPosts()
+export default async function BlogPage() {
+  const posts = await getAllPosts()
 
   return (
     <>

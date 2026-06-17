@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next"
 import { siteConfig } from "@/config/site"
 import { getAllPosts } from "@/lib/posts"
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteConfig.url
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -14,7 +14,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
   ]
 
-  const postRoutes: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
+  const posts = await getAllPosts()
+  const postRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${base}/blog/${post.slug}`,
     lastModified: new Date(post.created_at),
     changeFrequency: "monthly",

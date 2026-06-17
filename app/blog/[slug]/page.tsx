@@ -5,6 +5,9 @@ import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { siteConfig } from "@/config/site"
 import { getAllPosts, getPostBySlug } from "@/lib/posts"
+import { sanitizeHtml } from "@/lib/sanitize"
+
+export const revalidate = 60
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -12,7 +15,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = await getPostBySlug(slug)
 
   if (!post) {
     return {
@@ -35,8 +38,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export function generateStaticParams() {
-  return getAllPosts().map((p) => ({ slug: p.slug }))
+export async function generateStaticParams() {
+  const posts = await getAllPosts()
+  return posts.map((p) => ({ slug: p.slug }))
 }
 
 function formatDate(dateString: string): string {
@@ -49,7 +53,7 @@ function formatDate(dateString: string): string {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = await getPostBySlug(slug)
 
   if (!post) notFound()
 
@@ -111,7 +115,7 @@ export default async function BlogPostPage({ params }: Props) {
 
         <div
           className="prose-blueprint"
-          dangerouslySetInnerHTML={{ __html: post.content }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
         />
 
         <hr className="border-border mt-12 mb-8" />
